@@ -1,98 +1,152 @@
 import {
+  IonButton,
+  IonCol,
   IonContent,
+  IonFooter,
+  IonGrid,
+  IonHeader,
   IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonListHeader,
   IonMenu,
   IonMenuToggle,
-  IonNote,
-} from '@ionic/react';
+  IonRow,
+} from "@ionic/react";
 
-import { useLocation } from 'react-router-dom';
-import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
-import './Menu.css';
+import { useHistory, useLocation } from "react-router-dom";
+import {
+  chevronForward,
+  logoFacebook,
+  logoInstagram,
+  logoTwitter,
+} from "ionicons/icons";
 
 interface AppPage {
   url: string;
-  iosIcon: string;
-  mdIcon: string;
   title: string;
 }
 
 const appPages: AppPage[] = [
   {
-    title: 'Inbox',
-    url: '/page/Inbox',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp
+    title: "Home",
+    url: "/home",
   },
   {
-    title: 'Outbox',
-    url: '/page/Outbox',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp
+    title: "Primate Info",
+    url: "/primate-info",
   },
   {
-    title: 'Favorites',
-    url: '/page/Favorites',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp
+    title: "Primates Guide",
+    url: "/primates-guide",
   },
   {
-    title: 'Archived',
-    url: '/page/Archived',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp
+    title: "My Sightings",
+    url: "/my-sightings",
   },
   {
-    title: 'Trash',
-    url: '/page/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp
+    title: "My Account",
+    url: "/my-account",
   },
   {
-    title: 'Spam',
-    url: '/page/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp
-  }
+    title: "Feedback",
+    url: "/feedback",
+  },
+  {
+    title: "Language",
+    url: "/language",
+  },
 ];
 
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+const CloseButton: React.FC = () => {
+  return (
+    <IonMenuToggle className="flex items-center justify-end gap-2 my-12 mr-4">
+      <span className="bg-tertiary shadow-sm rounded-full p-2 w-8 h-8 flex items-center justify-center">
+        <IonIcon icon={chevronForward} color="light" size="large" />
+      </span>
+      <span className="text-xl text-tertiary">Close</span>
+    </IonMenuToggle>
+  );
+};
+
+interface MenuButtonProps {
+  appPage: AppPage;
+  selected: boolean;
+}
+
+const MenuButton: React.FC<MenuButtonProps> = ({ selected, appPage }) => {
+  const history = useHistory();
+
+  return (
+    <IonMenuToggle>
+      <button
+        className={`${
+          selected ? "bg-primary" : ""
+        } font-semibold text-xl p-4 rounded-2xl`}
+        onClick={() => history.push(appPage.url, { direction: "none" })}
+      >
+        {appPage.title}
+      </button>
+    </IonMenuToggle>
+  );
+};
 
 const Menu: React.FC = () => {
   const location = useLocation();
-
   return (
-    <IonMenu contentId="main" type="overlay">
-      <IonContent>
-        <IonList id="inbox-list">
-          <IonListHeader>Inbox</IonListHeader>
-          <IonNote>hi@ionicframework.com</IonNote>
-          {appPages.map((appPage, index) => {
+    <IonMenu swipeGesture={false} contentId="main" type="overlay">
+      <IonHeader>
+        <CloseButton />
+      </IonHeader>
+      <IonContent className="ion-padding">
+        <div className="flex flex-col gap-4 ml-4">
+          {appPages.map((appPage) => {
+            const selected = location.pathname === appPage.url;
             return (
-              <IonMenuToggle key={index} autoHide={false}>
-                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
-                  <IonIcon aria-hidden="true" slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
-                  <IonLabel>{appPage.title}</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
+              <MenuButton
+                key={appPage.url}
+                selected={selected}
+                appPage={appPage}
+              />
             );
           })}
-        </IonList>
-
-        <IonList id="labels-list">
-          <IonListHeader>Labels</IonListHeader>
-          {labels.map((label, index) => (
-            <IonItem lines="none" key={index}>
-              <IonIcon aria-hidden="true" slot="start" icon={bookmarkOutline} />
-              <IonLabel>{label}</IonLabel>
-            </IonItem>
-          ))}
-        </IonList>
+        </div>
       </IonContent>
+      <IonFooter>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="1.5"></IonCol>
+            <IonCol size="3" className="flex justify-center">
+              <IonButton fill="clear">
+                <IonIcon
+                  slot="icon-only"
+                  icon={logoFacebook}
+                  color="medium"
+                  size="large"
+                />
+              </IonButton>
+            </IonCol>
+            <IonCol size="3" className="flex justify-center">
+              <IonButton fill="clear">
+                <IonIcon
+                  slot="icon-only"
+                  icon={logoTwitter}
+                  color="medium"
+                  size="large"
+                />
+              </IonButton>
+            </IonCol>
+            <IonCol size="3" className="flex justify-center">
+              <IonButton fill="clear">
+                <IonIcon
+                  slot="icon-only"
+                  icon={logoInstagram}
+                  color="medium"
+                  size="large"
+                />
+              </IonButton>
+            </IonCol>
+            <IonCol size="1.5"></IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonFooter>
     </IonMenu>
   );
 };
