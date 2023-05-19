@@ -8,7 +8,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import Menu from "./components/Menu";
 
-import { WelcomePage } from "./pages";
+import { OnboardingPage, HomePage } from "./pages";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -39,10 +39,13 @@ const App: React.FC = () => {
         <Menu />
         <IonRouterOutlet id="main">
           <Route path="/" exact={true}>
-            <Redirect to="/welcome" />
+            <Redirect to="/onboarding" />
           </Route>
-          <Route path="/welcome" exact={true}>
-            <WelcomePage />
+          <Route path="/onboarding" exact={true}>
+            <OnboardingPage />
+          </Route>
+          <Route path="/home" exact={true}>
+            <HomePage />
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>

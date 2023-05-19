@@ -12,6 +12,7 @@ import {
   IonText,
   IonToolbar,
 } from "@ionic/react";
+import { PropsWithChildren, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as TSwiper } from "swiper/types";
 
@@ -20,16 +21,16 @@ import background from "./assets/background.png";
 
 import "swiper/css";
 import "swiper/css/pagination";
-import { PropsWithChildren, useRef, useState } from "react";
+import { useHistory } from "react-router";
 
-interface WelcomeScreenProps {
+interface OnboardingScreenProps {
   title: string;
 }
 
-export const WelcomeScreen = ({
+export const OnboardingScreen = ({
   title,
   children,
-}: PropsWithChildren<WelcomeScreenProps>) => {
+}: PropsWithChildren<OnboardingScreenProps>) => {
   return (
     <div className="flex flex-col justify-center items-center h-full w-full">
       <h1 className="text-white font-bold text-4xl px-12 text-center">
@@ -57,9 +58,10 @@ const PaginationBullet = ({ active }: { active: boolean }) => {
   );
 };
 
-export const WelcomePage: React.FC = () => {
+export const OnboardingPage: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef<TSwiper>();
+  const history = useHistory();
 
   const handlePrevSlide = () => {
     if (swiperRef.current) {
@@ -69,7 +71,8 @@ export const WelcomePage: React.FC = () => {
 
   const handleNextSlide = () => {
     if (activeIndex === 3) {
-      // TODO: Navigate to map page
+      history.push("/home");
+      return;
     }
 
     if (swiperRef.current) {
@@ -93,18 +96,18 @@ export const WelcomePage: React.FC = () => {
           }}
         >
           <SwiperSlide className="h-full">
-            <WelcomeScreen title="Welcome to Primate" />
+            <OnboardingScreen title="Onboarding to Primate" />
           </SwiperSlide>
           <SwiperSlide className="h-full">
-            <WelcomeScreen title=" Promoting ethical primate tourism" />
+            <OnboardingScreen title=" Promoting ethical primate tourism" />
           </SwiperSlide>
           <SwiperSlide className="h-full">
-            <WelcomeScreen title="Helping you and primates stay safe">
+            <OnboardingScreen title="Helping you and primates stay safe">
               <SeeIllustratedGuidelinesButton />
-            </WelcomeScreen>
+            </OnboardingScreen>
           </SwiperSlide>
           <SwiperSlide className="h-full">
-            <WelcomeScreen title="Let’s get exploring!" />
+            <OnboardingScreen title="Let’s get exploring!" />
           </SwiperSlide>
         </Swiper>
       </IonContent>
