@@ -123,7 +123,10 @@ export const HomePage: React.FC = () => {
         <IonModal isOpen={!!selectedSite}>
           {selectedSite && (
             <Details
-              onDismiss={() => setSelectedSite(null)}
+              onDismiss={() => {
+                setSearchTerm("");
+                setSelectedSite(null);
+              }}
               {...selectedSite}
             />
           )}
