@@ -1,6 +1,6 @@
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import Menu from "./components/Menu";
 
 import { OnboardingPage, HomePage, FallbackPage } from "./pages";
@@ -33,18 +33,20 @@ const App: React.FC = () => {
       <IonReactRouter>
         <Menu />
         <IonRouterOutlet id="main">
-          <Route path="/" exact={true}>
-            <Redirect to="/onboarding" />
-          </Route>
-          <Route path="/onboarding" exact={true}>
-            <OnboardingPage />
-          </Route>
-          <Route path="/home" exact={true}>
-            <HomePage />
-          </Route>
-          <Route path="*">
-            <FallbackPage />
-          </Route>
+          <Switch>
+            <Route path="/" exact={true}>
+              <Redirect to="/onboarding" />
+            </Route>
+            <Route path="/onboarding" exact={true}>
+              <OnboardingPage />
+            </Route>
+            <Route path="/home" exact={true}>
+              <HomePage />
+            </Route>
+            <Route path="*">
+              <FallbackPage />
+            </Route>
+          </Switch>
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>

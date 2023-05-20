@@ -7,14 +7,16 @@ import {
   IonSpinner,
   useIonModal,
 } from "@ionic/react";
-import { list, layers, navigate, location } from "ionicons/icons";
+import { list, layers, navigate } from "ionicons/icons";
 import { Page } from "../types";
 import { useState } from "react";
 import { Site } from "../../../types";
 import { useGetSites } from "../../../hooks";
+import { PrimateDetailsTitle } from "./PrimateDetailsTitle";
 
 import map from "../assets/map.png";
-import { PrimateDetailsTitle } from "./PrimateDetailsTitle";
+import location from "../assets/location.svg";
+import locationSelected from "../assets/location-seleted.svg";
 
 const SiteModal: React.FC<Site> = (site) => {
   return (
@@ -65,24 +67,31 @@ export const Map: React.FC<MapProps> = ({ setActivePage }) => {
       <IonImg src={map} className="absolute inset-0 object-cover" />
       {isLoading && <Loading />}
       {isSuccess &&
-        data?.map((site) => (
-          <div
-            key={site.id}
-            onClick={() => setSelectedSite(site)}
-            className="absolute"
-            style={{
-              top: site.location.top + "%",
-              left: site.location.left + "%",
-            }}
-          >
-            <IonIcon color="tertiary" icon={location} size="large" />
-          </div>
-        ))}
+        data?.map((site) => {
+          const isSelectedSite = selectedSite?.id === site?.id;
+          return (
+            <div
+              key={site.id}
+              onClick={() => setSelectedSite(site)}
+              className="absolute"
+              style={{
+                top: site.location.top + "%",
+                left: site.location.left + "%",
+              }}
+            >
+              <IonIcon
+                icon={isSelectedSite ? locationSelected : location}
+                size="large"
+                className={isSelectedSite ? "h-[52px] w-[52px]" : "h-12 w-12"}
+              />
+            </div>
+          );
+        })}
 
       <IonModal
         isOpen={!!selectedSite}
         handle
-        onDidDismiss={() => setSelectedSite(null)}
+        onWillDismiss={() => setSelectedSite(null)}
         initialBreakpoint={0.45}
         breakpoints={[0, 0.45]}
       >
