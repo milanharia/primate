@@ -22,39 +22,14 @@ import { useGetSites } from "../../../hooks";
 import favouriteStar from "../assets/favourites.svg";
 import outlineStar from "../assets/outlineStar.svg";
 import map from "../assets/map.png";
+import { PrimateDetailsTitle } from "./PrimateDetailsTitle";
 
-const SiteModal: React.FC<Site> = ({ img, title, isFavourite, country }) => {
+const SiteModal: React.FC<Site> = (site) => {
   return (
     <>
       <IonContent className="ion-padding">
-        <IonImg src={img} className="w-full mb-4 rounded-2xl" />
-        <div className="flex justify-between items-center">
-          <div className="flex-1">
-            <h1 className="font-semibold text-xl">{title}</h1>
-            <span className="flex items-center gap-2 mt-2">
-              <IonImg
-                src={country.flag}
-                alt={`flag of ${country.name}`}
-                className="h-3 w-3"
-              />
-              <span className="text-sm font-[500] text-tertiary">
-                {country.name}
-              </span>
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button>
-              <IonIcon
-                icon={isFavourite ? favouriteStar : outlineStar}
-                size="large"
-                color={isFavourite ? "primary" : "secondary"}
-              />
-            </button>
-            <button>
-              <IonIcon icon={checkmarkCircleOutline} size="large" />
-            </button>
-          </div>
-        </div>
+        <IonImg src={site.img} className="w-full mb-4 rounded-2xl" />
+        <PrimateDetailsTitle {...site} />
       </IonContent>
     </>
   );
@@ -98,6 +73,7 @@ export const Map: React.FC<MapProps> = ({ setActivePage }) => {
       {isSuccess &&
         data?.map((site) => (
           <div
+            key={site.id}
             onClick={() => setSelectedSite(site)}
             className={`absolute top-[${site.location.top}%] left-[${site.location.left}%]`}
           >

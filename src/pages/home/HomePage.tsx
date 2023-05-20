@@ -10,6 +10,7 @@ import {
   IonLabel,
   IonList,
   IonMenuButton,
+  IonModal,
   IonPage,
   IonSearchbar,
   IonToolbar,
@@ -22,24 +23,37 @@ import {
   starOutline,
 } from "ionicons/icons";
 import { IconCta } from "../../components";
-import { Map, List, Chip } from "./components";
-import { useState } from "react";
+import { Map, List, Chip, Details } from "./components";
+import { useMemo, useState } from "react";
 import { Filter, Page } from "./types";
 import { useGetSites } from "../../hooks";
+import { Site } from "../../types";
 
 export const HomePage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<Filter>(Filter.HOME);
   const [activePage, setActivePage] = useState<Page>(Page.MAP);
+  const [selectedSite, setSelectedSite] = useState<Site | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data } = useGetSites();
 
+  const searchResults = useMemo(() => {
+    if (!data) return [];
+    const res = data?.filter((site) => {
+      if (site.title.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return site;
+      }
+    });
+    return res;
+  }, [searchTerm, data]);
+
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
-        <IonToolbar color="transparent overflow-visible">
+        <IonToolbar color="transparent">
           <div className="relative flex items-center px-4 bg-white border-black border py-1 mt-4 rounded-l-full rounded-r-full">
             <IonSearchbar
+              mode="ios"
               inputMode="text"
               value={searchTerm}
               onIonInput={(e) => setSearchTerm(e?.detail?.value ?? "")}
@@ -77,13 +91,14 @@ export const HomePage: React.FC = () => {
           </div>
         </IonToolbar>
       </IonHeader>
-      {searchTerm.length ? (
+      {searchResults.length > 0 && searchTerm.length > 0 ? (
         <div className="absolute top-20 shadow-md mt-2 rounded-2xl overflow-hidden left-2 right-2 z-50 bg-white">
           <IonList>
-            {data?.map((site) => {
+            {searchResults?.map((site) => {
+              if (!site) return null;
               if (site.title.toLowerCase().includes(searchTerm.toLowerCase()))
                 return (
-                  <IonItem key={site.id}>
+                  <IonItem key={site.id} onClick={() => setSelectedSite(site)}>
                     <IonLabel>{site.title}</IonLabel>
                     <IonImg
                       slot="end"
@@ -99,7 +114,20 @@ export const HomePage: React.FC = () => {
       ) : null}
       <IonContent fullscreen>
         {activePage === Page.MAP && <Map setActivePage={setActivePage} />}
-        {activePage === Page.LIST && <List setActivePage={setActivePage} />}
+        {activePage === Page.LIST && (
+          <List
+            setActivePage={setActivePage}
+            setSelectedSite={setSelectedSite}
+          />
+        )}
+        <IonModal isOpen={!!selectedSite}>
+          {selectedSite && (
+            <Details
+              onDismiss={() => setSelectedSite(null)}
+              {...selectedSite}
+            />
+          )}
+        </IonModal>
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
           <IonFabButton>
             <IonIcon icon={add}></IonIcon>

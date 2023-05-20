@@ -17,7 +17,7 @@ import outlineStar from "../assets/outlineStar.svg";
 import { useGetSites } from "../../../hooks";
 import { ErrorState } from "../../../components";
 
-type CardProps = Site;
+type CardProps = Site & { onClick: () => void };
 
 const Card: React.FC<CardProps> = ({
   id,
@@ -25,9 +25,10 @@ const Card: React.FC<CardProps> = ({
   title,
   country,
   isFavourite,
+  onClick,
 }) => {
   return (
-    <IonCard>
+    <IonCard onClick={onClick}>
       <IonImg src={img} alt={title} className="w-full" />
       <IonCardHeader className="flex flex-row items-center justify-between">
         <div className="flex-col flex-1">
@@ -69,9 +70,13 @@ const LoadingState: React.FC = () => {
 
 interface ListProps {
   setActivePage: React.Dispatch<React.SetStateAction<Page>>;
+  setSelectedSite: React.Dispatch<React.SetStateAction<Site | null>>;
 }
 
-export const List: React.FC<ListProps> = ({ setActivePage }) => {
+export const List: React.FC<ListProps> = ({
+  setActivePage,
+  setSelectedSite,
+}) => {
   const { data, isLoading, isSuccess, isError, refetch } = useGetSites();
 
   return (
@@ -87,7 +92,14 @@ export const List: React.FC<ListProps> = ({ setActivePage }) => {
       </div>
 
       {isLoading && <LoadingState />}
-      {isSuccess && data.map((site) => <Card key={site.id} {...site}></Card>)}
+      {isSuccess &&
+        data.map((site) => (
+          <Card
+            key={site.id}
+            onClick={() => setSelectedSite(site)}
+            {...site}
+          ></Card>
+        ))}
       {isError && <ErrorState retry={refetch} />}
     </>
   );

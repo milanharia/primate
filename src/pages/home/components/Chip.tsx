@@ -2,7 +2,7 @@ import { IonChip, IonIcon, IonLabel } from "@ionic/react";
 import { PropsWithChildren } from "react";
 
 interface ChipProps {
-  icon: string;
+  icon?: string;
   active?: boolean;
   onClick?: () => void;
 }
@@ -23,7 +23,7 @@ export const Chip: React.FC<PropsWithChildren<ChipProps>> = ({
           : "var(--ion-color-light)",
       }}
     >
-      <IonIcon icon={icon} color="secondary" />
+      {icon && <IonIcon icon={icon} color="secondary" />}
       <IonLabel className="truncate font-bold">{children}</IonLabel>
     </IonChip>
   );
