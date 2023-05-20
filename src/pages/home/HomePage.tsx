@@ -2,6 +2,9 @@ import {
   IonChip,
   IonCol,
   IonContent,
+  IonFab,
+  IonFabButton,
+  IonFabList,
   IonFooter,
   IonGrid,
   IonHeader,
@@ -15,8 +18,13 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import {
+  add,
+  addSharp,
   checkmarkCircleOutline,
   earthOutline,
+  layers,
+  list,
+  navigate,
   searchSharp,
   starOutline,
 } from "ionicons/icons";
@@ -102,6 +110,22 @@ export const HomePage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <div className="absolute top-36 right-2 z-10 flex flex-col">
+          <IonFabButton size="small" color="light">
+            <IonIcon icon={list}></IonIcon>
+          </IonFabButton>
+          <IonFabButton size="small" color="light">
+            <IonIcon icon={layers}></IonIcon>
+          </IonFabButton>
+          <IonFabButton size="small" color="light">
+            <IonIcon icon={navigate}></IonIcon>
+          </IonFabButton>
+        </div>
+        <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonFabButton>
+            <IonIcon icon={addSharp}></IonIcon>
+          </IonFabButton>
+        </IonFab>
         <IonImg src={map} className="absolute inset-0 object-cover" />
       </IonContent>
       <IonFooter className="ion-no-border">
