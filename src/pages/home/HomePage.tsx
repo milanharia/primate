@@ -1,5 +1,6 @@
 import {
   IonContent,
+  IonFooter,
   IonHeader,
   IonImg,
   IonMenuButton,
@@ -9,6 +10,7 @@ import {
 } from "@ionic/react";
 import { searchSharp } from "ionicons/icons";
 import map from "./assets/map.png";
+import { IconCta } from "../../components";
 
 export const HomePage: React.FC = () => {
   return (
@@ -29,6 +31,11 @@ export const HomePage: React.FC = () => {
       <IonContent fullscreen>
         <IonImg src={map} className="absolute inset-0 object-cover" />
       </IonContent>
+      <IonFooter className="ion-no-border">
+        <IonToolbar color="transparent" className="text-center">
+          <IconCta>Guidelines</IconCta>
+        </IonToolbar>
+      </IonFooter>
     </IonPage>
   );
 };

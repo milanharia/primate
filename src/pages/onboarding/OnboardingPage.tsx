@@ -13,15 +13,15 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { PropsWithChildren, useRef, useState } from "react";
+import { useHistory } from "react-router";
+import { IconCta } from "../../components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as TSwiper } from "swiper/types";
 
-import monkey from "./assets/monkey.svg";
 import background from "./assets/background.png";
 
 import "swiper/css";
 import "swiper/css/pagination";
-import { useHistory } from "react-router";
 
 interface OnboardingScreenProps {
   title: string;
@@ -40,13 +40,6 @@ export const OnboardingScreen = ({
     </div>
   );
 };
-
-const SeeIllustratedGuidelinesButton = () => (
-  <button className="bg-black text-white font-bold py-2 px-6 rounded-l-full rounded-r-full mt-8 flex gap-2 items-center">
-    <span>See illustrated guidelines</span>
-    <IonIcon size="large" icon={monkey} />
-  </button>
-);
 
 const PaginationBullet = ({ active }: { active: boolean }) => {
   return (
@@ -103,7 +96,9 @@ export const OnboardingPage: React.FC = () => {
           </SwiperSlide>
           <SwiperSlide className="h-full">
             <OnboardingScreen title="Helping you and primates stay safe">
-              <SeeIllustratedGuidelinesButton />
+              <div className="mt-8">
+                <IconCta>See illustrated guidelines</IconCta>
+              </div>
             </OnboardingScreen>
           </SwiperSlide>
           <SwiperSlide className="h-full">
@@ -111,7 +106,7 @@ export const OnboardingPage: React.FC = () => {
           </SwiperSlide>
         </Swiper>
       </IonContent>
-      <IonFooter className="transparent ">
+      <IonFooter className="transparent ion-no-border">
         <IonToolbar color="transparent">
           <IonGrid>
             <IonRow>
