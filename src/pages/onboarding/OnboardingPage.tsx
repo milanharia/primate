@@ -41,9 +41,16 @@ export const OnboardingScreen = ({
   );
 };
 
-const PaginationBullet = ({ active }: { active: boolean }) => {
+const PaginationBullet = ({
+  active,
+  testId,
+}: {
+  active: boolean;
+  testId: string;
+}) => {
   return (
     <span
+      data-cy={testId}
       className={`${
         active ? "bg-primary" : "bg-white"
       } rounded-full h-[14px] w-[14px]`}
@@ -89,10 +96,10 @@ export const OnboardingPage: React.FC = () => {
           }}
         >
           <SwiperSlide className="h-full">
-            <OnboardingScreen title="Onboarding to Primate" />
+            <OnboardingScreen title="Welcome to Primate" />
           </SwiperSlide>
           <SwiperSlide className="h-full">
-            <OnboardingScreen title=" Promoting ethical primate tourism" />
+            <OnboardingScreen title="Promoting ethical primate tourism" />
           </SwiperSlide>
           <SwiperSlide className="h-full">
             <OnboardingScreen title="Helping you and primates stay safe">
@@ -120,6 +127,7 @@ export const OnboardingPage: React.FC = () => {
                     color="transparent"
                     className="font-[500]"
                     onClick={handlePrevSlide}
+                    data-cy="prev-btn"
                   >
                     <IonText color="primary">
                       <span className="font-[500]">Back</span>
@@ -129,10 +137,22 @@ export const OnboardingPage: React.FC = () => {
               </IonCol>
               <IonCol className="flex items-center">
                 <div className="flex gap-2 items-center justify-center">
-                  <PaginationBullet active={activeIndex === 0} />
-                  <PaginationBullet active={activeIndex === 1} />
-                  <PaginationBullet active={activeIndex === 2} />
-                  <PaginationBullet active={activeIndex === 3} />
+                  <PaginationBullet
+                    testId="bullet-1"
+                    active={activeIndex === 0}
+                  />
+                  <PaginationBullet
+                    testId="bullet-2"
+                    active={activeIndex === 1}
+                  />
+                  <PaginationBullet
+                    testId="bullet-3"
+                    active={activeIndex === 2}
+                  />
+                  <PaginationBullet
+                    testId="bullet-4"
+                    active={activeIndex === 3}
+                  />
                 </div>
               </IonCol>
               <IonCol>
@@ -141,6 +161,7 @@ export const OnboardingPage: React.FC = () => {
                   color="primary"
                   className="font-[500]"
                   onClick={handleNextSlide}
+                  data-cy="next-btn"
                 >
                   {activeIndex === 3 ? "Explore" : "Next"}
                 </IonButton>
