@@ -1,73 +1,30 @@
 import {
-  IonChip,
-  IonCol,
   IonContent,
   IonFab,
   IonFabButton,
-  IonFabList,
   IonFooter,
-  IonGrid,
   IonHeader,
   IonIcon,
-  IonImg,
-  IonLabel,
   IonMenuButton,
   IonPage,
-  IonRow,
   IonSearchbar,
   IonToolbar,
 } from "@ionic/react";
 import {
   add,
-  addSharp,
   checkmarkCircleOutline,
   earthOutline,
-  layers,
-  list,
-  navigate,
   searchSharp,
   starOutline,
 } from "ionicons/icons";
-import map from "./assets/map.png";
 import { IconCta } from "../../components";
-import { PropsWithChildren, useState } from "react";
-
-enum Filter {
-  "HOME",
-  "FAVOURITES",
-  "BEEN",
-}
-
-interface ChipProps {
-  icon: string;
-  active?: boolean;
-  onClick?: () => void;
-}
-
-const Chip: React.FC<PropsWithChildren<ChipProps>> = ({
-  icon,
-  active,
-  onClick,
-  children,
-}) => {
-  return (
-    <IonChip
-      className="border border-[#BFBFBF]"
-      onClick={onClick}
-      style={{
-        "--background": active
-          ? "var(--ion-color-primary)"
-          : "var(--ion-color-light)",
-      }}
-    >
-      <IonIcon icon={icon} color="secondary" />
-      <IonLabel className="truncate font-bold">{children}</IonLabel>
-    </IonChip>
-  );
-};
+import { Map, List, Chip } from "./components";
+import { useState } from "react";
+import { Filter, Page } from "./types";
 
 export const HomePage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<Filter>(Filter.HOME);
+  const [activePage, setActivePage] = useState<Page>(Page.MAP);
 
   return (
     <IonPage>
@@ -110,23 +67,13 @@ export const HomePage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <div className="absolute top-36 right-2 z-10 flex flex-col">
-          <IonFabButton size="small" color="light">
-            <IonIcon icon={list}></IonIcon>
-          </IonFabButton>
-          <IonFabButton size="small" color="light">
-            <IonIcon icon={layers}></IonIcon>
-          </IonFabButton>
-          <IonFabButton size="small" color="light">
-            <IonIcon icon={navigate}></IonIcon>
-          </IonFabButton>
-        </div>
+        {activePage === Page.MAP && <Map setActivePage={setActivePage} />}
+        {activePage === Page.LIST && <List setActivePage={setActivePage} />}
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
           <IonFabButton>
-            <IonIcon icon={addSharp}></IonIcon>
+            <IonIcon icon={add}></IonIcon>
           </IonFabButton>
         </IonFab>
-        <IonImg src={map} className="absolute inset-0 object-cover" />
       </IonContent>
       <IonFooter className="ion-no-border">
         <IonToolbar color="transparent" className="text-center">
