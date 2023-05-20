@@ -1,1 +1,2 @@
-export * from "./IconCta/IconCta";
+export * from "./icon-cta/IconCta";
+export * from "./error-state/ErrorState";
