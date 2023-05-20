@@ -12,8 +12,11 @@ import {
   IonMenuButton,
   IonModal,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonSearchbar,
   IonToolbar,
+  RefresherEventDetail,
 } from "@ionic/react";
 import {
   add,
@@ -35,7 +38,13 @@ export const HomePage: React.FC = () => {
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data } = useGetSites();
+  const { data, refetch } = useGetSites();
+
+  const handleRefresh = (event: CustomEvent<RefresherEventDetail>) => {
+    refetch().then(() => {
+      event.detail.complete();
+    });
+  };
 
   const searchResults = useMemo(() => {
     if (!data) return [];
@@ -51,7 +60,7 @@ export const HomePage: React.FC = () => {
     <IonPage>
       <IonHeader className="ion-no-border">
         <IonToolbar color="transparent">
-          <div className="relative flex items-center px-4 bg-white border-black border py-1 mt-4 rounded-l-full rounded-r-full">
+          <div className="relative mx-4 flex items-center px-4 bg-white border-black border py-1 mt-4 rounded-l-full rounded-r-full">
             <IonSearchbar
               mode="ios"
               inputMode="text"
@@ -92,7 +101,7 @@ export const HomePage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       {searchResults.length > 0 && searchTerm.length > 0 ? (
-        <div className="absolute top-20 shadow-md mt-2 rounded-2xl overflow-hidden left-2 right-2 z-50 bg-white">
+        <div className="absolute top-36 shadow-md mt-2 rounded-2xl overflow-hidden left-2 right-2 z-50 bg-white">
           <IonList>
             {searchResults?.map((site) => {
               if (!site) return null;
@@ -112,7 +121,11 @@ export const HomePage: React.FC = () => {
           </IonList>
         </div>
       ) : null}
-      <IonContent fullscreen>
+      <IonContent fullscreen forceOverscroll={activePage !== Page.MAP}>
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
+
         {activePage === Page.MAP && <Map setActivePage={setActivePage} />}
         {activePage === Page.LIST && (
           <List

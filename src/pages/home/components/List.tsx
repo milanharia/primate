@@ -29,7 +29,9 @@ const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <IonCard onClick={onClick}>
-      <IonImg src={img} alt={title} className="w-full" />
+      <div className="relative aspect-img w-full m-2 rounded-lg overflow-hidden">
+        <IonImg src={img} className="absolute inset-0 object-cover" />
+      </div>
       <IonCardHeader className="flex flex-row items-center justify-between">
         <div className="flex-col flex-1">
           <IonCardTitle className="text-sm">{title}</IonCardTitle>
@@ -81,7 +83,7 @@ export const List: React.FC<ListProps> = ({
 
   return (
     <>
-      <div className="fixed top-36 right-2 z-10">
+      <div className="fixed top-48 right-2 z-10">
         <IonFabButton
           onClick={() => setActivePage(Page.MAP)}
           size="small"

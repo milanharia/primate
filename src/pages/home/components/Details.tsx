@@ -34,7 +34,7 @@ const Safety: React.FC = () => {
   return (
     <section>
       <SectionHeader>KEY SAFETY ADVICE</SectionHeader>
-      <IonList lines="none">
+      <IonList className="my-4" lines="none">
         <IonItem>
           <IonAvatar slot="start">
             <img src={avatar1} alt="avatar1" />
@@ -136,7 +136,7 @@ const Sightings: React.FC = () => {
   return (
     <section>
       <SectionHeader>MY SIGHTINGS</SectionHeader>
-      <IonList lines="none">
+      <IonList className="my-4" lines="none">
         <IonItem detail>
           <IonAvatar slot="start">
             <img src={avatar2} alt="avatar1" />
@@ -148,7 +148,7 @@ const Sightings: React.FC = () => {
         </IonItem>
       </IonList>
       <SectionHeader>RECENT SIGHTINGS</SectionHeader>
-      <IonList lines="none">
+      <IonList className="my-4" lines="none">
         <IonItem detail>
           <IonAvatar slot="start">
             <img src={avatar3} alt="avatar1" />
@@ -220,11 +220,17 @@ export const Details: React.FC<DetailsProps> = ({ onDismiss, ...site }) => {
           size="small"
           color="secondary"
           slot="fixed"
-          className="right-0"
+          className=" top-12 right-0"
         >
           <IonIcon icon={chevronDown}></IonIcon>
         </IonFabButton>
-        <IonImg src={site.img} alt={site.title} className="w-full" />
+        <div className="relative aspect-video w-full rounded-2xl overflow-hidden">
+          <IonImg
+            src={site.img}
+            alt={site.title}
+            className="absolute inset-0 object-cover"
+          />
+        </div>
         <div className="p-4">
           <PrimateDetailsTitle {...site} />
         </div>

@@ -3,7 +3,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import Menu from "./components/Menu";
 
-import { OnboardingPage, HomePage } from "./pages";
+import { OnboardingPage, HomePage, FallbackPage } from "./pages";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -41,6 +41,9 @@ const App: React.FC = () => {
           </Route>
           <Route path="/home" exact={true}>
             <HomePage />
+          </Route>
+          <Route path="*">
+            <FallbackPage />
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>

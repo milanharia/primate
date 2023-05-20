@@ -7,20 +7,12 @@ import {
   IonSpinner,
   useIonModal,
 } from "@ionic/react";
-import {
-  list,
-  layers,
-  navigate,
-  location,
-  checkmarkCircleOutline,
-} from "ionicons/icons";
+import { list, layers, navigate, location } from "ionicons/icons";
 import { Page } from "../types";
 import { useState } from "react";
 import { Site } from "../../../types";
 import { useGetSites } from "../../../hooks";
 
-import favouriteStar from "../assets/favourites.svg";
-import outlineStar from "../assets/outlineStar.svg";
 import map from "../assets/map.png";
 import { PrimateDetailsTitle } from "./PrimateDetailsTitle";
 
@@ -28,7 +20,9 @@ const SiteModal: React.FC<Site> = (site) => {
   return (
     <>
       <IonContent className="ion-padding">
-        <IonImg src={site.img} className="w-full mb-4 rounded-2xl" />
+        <div className="relative aspect-img w-full rounded-2xl overflow-hidden my-4">
+          <IonImg src={site.img} className="absolute inset-0 object-cover" />
+        </div>
         <PrimateDetailsTitle {...site} />
       </IonContent>
     </>
@@ -53,7 +47,7 @@ export const Map: React.FC<MapProps> = ({ setActivePage }) => {
 
   return (
     <>
-      <div className="absolute top-36 right-2 z-10 flex flex-col">
+      <div className="absolute top-42 right-2 z-10 flex flex-col">
         <IonFabButton
           onClick={() => setActivePage(Page.LIST)}
           size="small"
@@ -75,7 +69,11 @@ export const Map: React.FC<MapProps> = ({ setActivePage }) => {
           <div
             key={site.id}
             onClick={() => setSelectedSite(site)}
-            className={`absolute top-[${site.location.top}%] left-[${site.location.left}%]`}
+            className="absolute"
+            style={{
+              top: site.location.top + "%",
+              left: site.location.left + "%",
+            }}
           >
             <IonIcon color="tertiary" icon={location} size="large" />
           </div>
@@ -85,8 +83,8 @@ export const Map: React.FC<MapProps> = ({ setActivePage }) => {
         isOpen={!!selectedSite}
         handle
         onDidDismiss={() => setSelectedSite(null)}
-        initialBreakpoint={0.4}
-        breakpoints={[0, 0.4]}
+        initialBreakpoint={0.45}
+        breakpoints={[0, 0.45]}
       >
         {selectedSite && <SiteModal {...selectedSite} />}
       </IonModal>
