@@ -4,8 +4,6 @@ import {
   IonContent,
   IonFooter,
   IonGrid,
-  IonHeader,
-  IonIcon,
   IonImg,
   IonPage,
   IonRow,
@@ -17,13 +15,12 @@ import { useHistory } from "react-router";
 import { IconCta } from "../../components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as TSwiper } from "swiper/types";
+import { Preferences } from "@capacitor/preferences";
+import { SplashScreen } from "@capacitor/splash-screen";
 
 import background from "./assets/background.png";
 
 import "swiper/css";
-import "swiper/css/pagination";
-import { Preferences } from "@capacitor/preferences";
-import { SplashScreen } from "@capacitor/splash-screen";
 
 interface OnboardingScreenProps {
   title: string;

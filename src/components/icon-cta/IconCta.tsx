@@ -1,5 +1,5 @@
 import { IonButton, IonIcon } from "@ionic/react";
-import { ComponentProps, ReactNode } from "react";
+import { ComponentProps } from "react";
 import monkey from "../assets/monkey.svg";
 
 type BaseIonButtonProps = ComponentProps<typeof IonButton>;

@@ -1,3 +1,4 @@
+import { Filter, Site } from "../types";
 import site1 from "../assets/images/site1.png";
 import site2 from "../assets/images/site2.png";
 import site3 from "../assets/images/site3.png";
@@ -5,7 +6,6 @@ import site4 from "../assets/images/site4.png";
 import indonseia from "../assets/images/indonesia.svg";
 import philippines from "../assets/images/philippines.svg";
 import papuaNewGuinea from "../assets/images/papua-new-guinea.svg";
-import { Filter, Site } from "../types";
 
 let SITES: Site[] = [
   {

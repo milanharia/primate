@@ -13,14 +13,13 @@ import {
   useIonAlert,
   useIonToast,
 } from "@ionic/react";
-
-import { useHistory, useLocation } from "react-router-dom";
 import {
   chevronForward,
   logoFacebook,
   logoInstagram,
   logoTwitter,
 } from "ionicons/icons";
+import { useHistory, useLocation } from "react-router-dom";
 import { Preferences } from "@capacitor/preferences";
 
 interface AppPage {
@@ -95,7 +94,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({ selected, appPage }) => {
   );
 };
 
-const Menu: React.FC = () => {
+export const Menu: React.FC = () => {
   const location = useLocation();
 
   const [presentAlert] = useIonAlert();
@@ -113,10 +112,12 @@ const Menu: React.FC = () => {
           handler: () => {
             Preferences.remove({ key: "hasUserOnboarded" })
               .then(() => {
-                presentToast(
-                  "You will see the onboarding flow when you next open the app",
-                  2500
-                );
+                presentToast({
+                  cssClass: "success-toast",
+                  message:
+                    "You will see the onboarding flow when you next open the app",
+                  duration: 2500,
+                });
               })
               .catch((e) => {
                 presentToast("Something went wrong", 2500);
@@ -201,5 +202,3 @@ const Menu: React.FC = () => {
     </IonMenu>
   );
 };
-
-export default Menu;
