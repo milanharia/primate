@@ -77,3 +77,11 @@ ion-toast.success-toast::part(message) {
   color: var(--ion-color-primary) !important;
   font-weight: 600 !important;
 }
+
+ion-toast.error-toast::part(icon) {
+  color: var(--ion-color-danger);
+}
+ion-toast.error-toast::part(message) {
+  color: var(--ion-color-danger) !important;
+  font-weight: 600 !important;
+}

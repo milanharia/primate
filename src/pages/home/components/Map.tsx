@@ -5,9 +5,9 @@ import {
   IonImg,
   IonModal,
   IonSpinner,
-  useIonModal,
+  IonToast,
 } from "@ionic/react";
-import { list, layers, navigate } from "ionicons/icons";
+import { list, layers, navigate, warning } from "ionicons/icons";
 import { Page } from "../types";
 import { useEffect, useState } from "react";
 import { Filter, Site } from "../../../types";
@@ -51,7 +51,7 @@ export const Map: React.FC<MapProps> = ({
   setActivePage,
   setBackgroundImgLoaded,
 }) => {
-  const { data, isLoading, isSuccess } = useGetSites();
+  const { data, isLoading, isSuccess, isError, refetch } = useGetSites();
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
   const filteredSites = getFilteredSites(data ?? [], activeFilter);
 
@@ -111,6 +111,20 @@ export const Map: React.FC<MapProps> = ({
             </div>
           );
         })}
+      <IonToast
+        className="error-toast"
+        message="Something went wrong loading sites. Please try again later"
+        icon={warning}
+        isOpen={!isError}
+        buttons={[
+          {
+            text: "retry",
+            handler: () => {
+              refetch();
+            },
+          },
+        ]}
+      />
 
       <IonModal
         isOpen={!!selectedSite}
