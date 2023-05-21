@@ -7,6 +7,7 @@ import {
   IonImg,
   IonCardSubtitle,
   IonSkeletonText,
+  IonFab,
 } from "@ionic/react";
 import { map } from "ionicons/icons";
 import { Page } from "../types";
@@ -29,7 +30,7 @@ const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <IonCard onClick={onClick}>
-      <div className="relative aspect-img w-full m-2 rounded-lg overflow-hidden">
+      <div className="relative w-full m-2 overflow-hidden rounded-lg aspect-img">
         <IonImg src={img} className="absolute inset-0 object-cover" />
       </div>
       <IonCardHeader className="flex flex-row items-center justify-between">
@@ -40,7 +41,7 @@ const Card: React.FC<CardProps> = ({
               <IonImg
                 src={country.flag}
                 alt={`flag of ${country.name}`}
-                className="h-3 w-3"
+                className="w-3 h-3"
               />
               <span className="text-xs ">{country.name}</span>
             </span>
@@ -63,9 +64,9 @@ const Card: React.FC<CardProps> = ({
 const LoadingState: React.FC = () => {
   return (
     <div className="p-4">
-      <IonSkeletonText className="h-52 w-full rounded-2xl mb-4" />
-      <IonSkeletonText className="h-52 w-full rounded-2xl mb-4" />
-      <IonSkeletonText className="h-52 w-full rounded-2xl mb-4" />
+      <IonSkeletonText className="w-full mb-4 h-52 rounded-2xl" />
+      <IonSkeletonText className="w-full mb-4 h-52 rounded-2xl" />
+      <IonSkeletonText className="w-full mb-4 h-52 rounded-2xl" />
     </div>
   );
 };
@@ -83,7 +84,7 @@ export const List: React.FC<ListProps> = ({
 
   return (
     <>
-      <div className="fixed top-48 right-2 z-10">
+      <IonFab slot="fixed" horizontal="end" vertical="top">
         <IonFabButton
           onClick={() => setActivePage(Page.MAP)}
           size="small"
@@ -91,7 +92,7 @@ export const List: React.FC<ListProps> = ({
         >
           <IonIcon icon={map}></IonIcon>
         </IonFabButton>
-      </div>
+      </IonFab>
 
       {isLoading && <LoadingState />}
       {isSuccess &&
