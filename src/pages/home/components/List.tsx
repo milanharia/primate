@@ -9,8 +9,9 @@ import {
   IonSkeletonText,
   IonFab,
   IonSpinner,
+  useIonToast,
 } from "@ionic/react";
-import { map } from "ionicons/icons";
+import { checkmarkCircle, map } from "ionicons/icons";
 import { Page } from "../types";
 import { Filter, Site } from "../../../types";
 import { useFavouriteSite, useGetSites } from "../../../hooks";
@@ -30,7 +31,7 @@ const Card: React.FC<CardProps> = ({
   onClick,
 }) => {
   const { mutate, isLoading } = useFavouriteSite();
-
+  const [presentToast] = useIonToast();
   return (
     <IonCard onClick={onClick}>
       <div className="relative w-full m-2 overflow-hidden rounded-lg aspect-img">
@@ -54,6 +55,15 @@ const Card: React.FC<CardProps> = ({
           <button
             onClick={(e) => {
               mutate(id);
+              presentToast({
+                message: !isFavourite
+                  ? "Site added to favourites!"
+                  : "Site removed from favourites",
+                icon: checkmarkCircle,
+                color: "dark",
+                duration: 1000,
+                cssClass: "success-toast",
+              });
               e.stopPropagation();
             }}
           >

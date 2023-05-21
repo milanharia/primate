@@ -9,7 +9,7 @@ import {
 } from "@ionic/react";
 import { list, layers, navigate } from "ionicons/icons";
 import { Page } from "../types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Filter, Site } from "../../../types";
 import { useGetSites } from "../../../hooks";
 import { PrimateDetailsTitle } from "./PrimateDetailsTitle";
@@ -54,7 +54,18 @@ export const Map: React.FC<MapProps> = ({
   const { data, isLoading, isSuccess } = useGetSites();
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
   const filteredSites = getFilteredSites(data ?? [], activeFilter);
-  console.log(data);
+
+  // If data is mutated we need to ensure the selected site is also updated
+  useEffect(() => {
+    if (selectedSite) {
+      const updatedSiteData = (data ?? []).find(
+        (site) => site.id === selectedSite.id
+      );
+      if (!updatedSiteData) return;
+      setSelectedSite(updatedSiteData);
+    }
+  }, [data]);
+
   return (
     <>
       <div className="absolute z-10 flex flex-col top-42 right-2">

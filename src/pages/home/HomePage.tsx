@@ -50,6 +50,17 @@ export const HomePage: React.FC = () => {
 
   const { data, refetch } = useGetSites();
 
+  // If data is mutated we need to ensure the selected site is also updated
+  useEffect(() => {
+    if (selectedSite) {
+      const updatedSiteData = (data ?? []).find(
+        (site) => site.id === selectedSite.id
+      );
+      if (!updatedSiteData) return;
+      setSelectedSite(updatedSiteData);
+    }
+  }, [data]);
+
   const handleRefresh = (event: CustomEvent<RefresherEventDetail>) => {
     refetch().then(() => {
       event.detail.complete();

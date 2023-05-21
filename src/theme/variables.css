@@ -70,10 +70,10 @@ ion-alert button span {
   color: var(--ion-color-secondary);
 }
 
-ion-toast.has-been-toast::part(icon) {
+ion-toast.success-toast::part(icon) {
   color: var(--ion-color-primary);
 }
-ion-toast.has-been-toast::part(message) {
+ion-toast.success-toast::part(message) {
   color: var(--ion-color-primary) !important;
   font-weight: 600 !important;
 }

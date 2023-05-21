@@ -36,6 +36,15 @@ export const PrimateDetailsTitle: React.FC<Site> = ({
           <button
             onClick={(e) => {
               setFavouriteSite(id);
+              presentToast({
+                message: !isFavourite
+                  ? "Site added to favourites!"
+                  : "Site removed from favourites",
+                icon: checkmarkCircle,
+                color: "dark",
+                duration: 1000,
+                cssClass: "success-toast",
+              });
               e.stopPropagation();
             }}
           >
@@ -49,11 +58,13 @@ export const PrimateDetailsTitle: React.FC<Site> = ({
             onClick={(e) => {
               setBeenSite(id);
               presentToast({
-                message: "I've Been Here!",
+                message: !hasBeen
+                  ? "I've Been Here!"
+                  : "Site removed from I've Been",
                 icon: checkmarkCircle,
                 color: "dark",
-                duration: 1500,
-                cssClass: "has-been-toast",
+                duration: 1000,
+                cssClass: "success-toast",
               });
               e.stopPropagation();
             }}
