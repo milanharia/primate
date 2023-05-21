@@ -17,15 +17,12 @@ describe("Menu", () => {
     cy.contains("Language");
   });
 
-  // Added waits as a temporary workaround for menu animation to complete
   it("should dismiss the menu when the close button is clicked", () => {
-    cy.wait(500);
     cy.get("[data-cy=menu-close-btn]").click({ force: true });
     cy.get("ion-menu").should("not.have.class", "show-menu");
   });
 
   it("should dismiss the menu when a menu button is clicked", () => {
-    cy.wait(500);
     cy.contains("Home").click({ force: true });
     cy.url().should("include", "/home");
     cy.get("ion-menu").should("not.have.class", "show-menu");

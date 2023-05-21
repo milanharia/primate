@@ -33,7 +33,7 @@ const Card: React.FC<CardProps> = ({
   const { mutate, isLoading } = useFavouriteSite();
   const [presentToast] = useIonToast();
   return (
-    <IonCard onClick={onClick}>
+    <IonCard data-cy="site-card" onClick={onClick}>
       <div className="relative w-full m-2 overflow-hidden rounded-lg aspect-img">
         <IonImg src={img} className="absolute inset-0 object-cover" />
       </div>
@@ -53,6 +53,7 @@ const Card: React.FC<CardProps> = ({
         </div>
         <div>
           <button
+            data-cy={`site-${id}-card-fav-btn`}
             onClick={(e) => {
               mutate(id);
               presentToast({

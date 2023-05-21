@@ -83,6 +83,7 @@ export const HomePage: React.FC = () => {
         <IonToolbar color="transparent">
           <div className="relative flex items-center px-4 py-1 mx-4 mt-4 bg-white border border-black rounded-l-full rounded-r-full">
             <IonSearchbar
+              data-cy="home-search-bar"
               mode="ios"
               inputMode="text"
               value={searchTerm}
@@ -128,7 +129,11 @@ export const HomePage: React.FC = () => {
               if (!site) return null;
               if (site.title.toLowerCase().includes(searchTerm.toLowerCase()))
                 return (
-                  <IonItem key={site.id} onClick={() => setSelectedSite(site)}>
+                  <IonItem
+                    data-cy={`site-${site.id}-auto-suggest`}
+                    key={site.id}
+                    onClick={() => setSelectedSite(site)}
+                  >
                     <IonLabel>{site.title}</IonLabel>
                     <IonImg
                       slot="end"

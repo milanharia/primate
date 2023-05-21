@@ -27,7 +27,7 @@ import "./styles/tailwind.css";
 import { useEffect, useState } from "react";
 import { Preferences } from "@capacitor/preferences";
 
-setupIonicReact();
+setupIonicReact({ animated: "Cypress" in window === false });
 
 const AppLauncher: React.FC = () => {
   const [hasUserOnboarded, setHasUserOnboarded] = useState(false);

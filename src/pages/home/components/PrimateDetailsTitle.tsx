@@ -34,6 +34,7 @@ export const PrimateDetailsTitle: React.FC<Site> = ({
         </div>
         <div className="flex items-center gap-2">
           <button
+            data-cy="fav-btn"
             onClick={(e) => {
               setFavouriteSite(id);
               presentToast({
@@ -55,6 +56,7 @@ export const PrimateDetailsTitle: React.FC<Site> = ({
             />
           </button>
           <button
+            data-cy="been-btn"
             onClick={(e) => {
               setBeenSite(id);
               presentToast({

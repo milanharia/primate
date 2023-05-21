@@ -70,6 +70,7 @@ export const Map: React.FC<MapProps> = ({
     <>
       <div className="absolute z-10 flex flex-col top-42 right-2">
         <IonFabButton
+          data-cy="list-btn"
           onClick={() => setActivePage(Page.LIST)}
           size="small"
           color="light"
@@ -98,6 +99,7 @@ export const Map: React.FC<MapProps> = ({
               key={site.id}
               onClick={() => setSelectedSite(site)}
               className="absolute"
+              data-cy="map-pin"
               style={{
                 top: site.location.top + "%",
                 left: site.location.left + "%",
