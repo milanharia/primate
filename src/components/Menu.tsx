@@ -127,7 +127,7 @@ const Menu: React.FC = () => {
 
   return (
     <IonMenu swipeGesture={false} contentId="main" type="overlay">
-      <IonHeader className="pt-12">
+      <IonHeader className="pt-12 ion-no-border">
         <CloseButton />
       </IonHeader>
       <IonContent className="ion-padding">

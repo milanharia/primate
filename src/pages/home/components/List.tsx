@@ -8,15 +8,16 @@ import {
   IonCardSubtitle,
   IonSkeletonText,
   IonFab,
+  IonSpinner,
 } from "@ionic/react";
 import { map } from "ionicons/icons";
 import { Page } from "../types";
-import { Site } from "../../../types";
-
+import { Filter, Site } from "../../../types";
+import { useFavouriteSite, useGetSites } from "../../../hooks";
+import { ErrorState } from "../../../components";
+import { getFilteredSites } from "../../../utils/sites";
 import favouriteStar from "../assets/favourites.svg";
 import outlineStar from "../assets/outlineStar.svg";
-import { useGetSites } from "../../../hooks";
-import { ErrorState } from "../../../components";
 
 type CardProps = Site & { onClick: () => void };
 
@@ -28,6 +29,8 @@ const Card: React.FC<CardProps> = ({
   isFavourite,
   onClick,
 }) => {
+  const { mutate, isLoading } = useFavouriteSite();
+
   return (
     <IonCard onClick={onClick}>
       <div className="relative w-full m-2 overflow-hidden rounded-lg aspect-img">
@@ -48,12 +51,21 @@ const Card: React.FC<CardProps> = ({
           </IonCardSubtitle>
         </div>
         <div>
-          <button>
-            <IonIcon
-              icon={isFavourite ? favouriteStar : outlineStar}
-              size="large"
-              color={isFavourite ? "primary" : "secondary"}
-            />
+          <button
+            onClick={(e) => {
+              mutate(id);
+              e.stopPropagation();
+            }}
+          >
+            {isLoading ? (
+              <IonSpinner />
+            ) : (
+              <IonIcon
+                icon={isFavourite ? favouriteStar : outlineStar}
+                size="large"
+                color={isFavourite ? "primary" : "secondary"}
+              />
+            )}
           </button>
         </div>
       </IonCardHeader>
@@ -72,15 +84,19 @@ const LoadingState: React.FC = () => {
 };
 
 interface ListProps {
+  activeFilter: Filter;
   setActivePage: React.Dispatch<React.SetStateAction<Page>>;
   setSelectedSite: React.Dispatch<React.SetStateAction<Site | null>>;
 }
 
 export const List: React.FC<ListProps> = ({
+  activeFilter,
   setActivePage,
   setSelectedSite,
 }) => {
   const { data, isLoading, isSuccess, isError, refetch } = useGetSites();
+
+  const filteredSites = getFilteredSites(data ?? [], activeFilter);
 
   return (
     <>
@@ -96,12 +112,8 @@ export const List: React.FC<ListProps> = ({
 
       {isLoading && <LoadingState />}
       {isSuccess &&
-        data.map((site) => (
-          <Card
-            key={site.id}
-            onClick={() => setSelectedSite(site)}
-            {...site}
-          ></Card>
+        filteredSites.map((site) => (
+          <Card key={site.id} onClick={() => setSelectedSite(site)} {...site} />
         ))}
       {isError && <ErrorState retry={refetch} />}
     </>

@@ -69,3 +69,11 @@ http://ionicframework.com/docs/theming/ */
 ion-alert button span {
   color: var(--ion-color-secondary);
 }
+
+ion-toast.has-been-toast::part(icon) {
+  color: var(--ion-color-primary);
+}
+ion-toast.has-been-toast::part(message) {
+  color: var(--ion-color-primary) !important;
+  font-weight: 600 !important;
+}

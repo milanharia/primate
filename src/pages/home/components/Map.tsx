@@ -10,13 +10,14 @@ import {
 import { list, layers, navigate } from "ionicons/icons";
 import { Page } from "../types";
 import { useState } from "react";
-import { Site } from "../../../types";
+import { Filter, Site } from "../../../types";
 import { useGetSites } from "../../../hooks";
 import { PrimateDetailsTitle } from "./PrimateDetailsTitle";
 
 import map from "../assets/map.png";
 import location from "../assets/location.svg";
 import locationSelected from "../assets/location-seleted.svg";
+import { getFilteredSites } from "../../../utils/sites";
 
 const SiteModal: React.FC<Site> = (site) => {
   return (
@@ -40,17 +41,20 @@ const Loading = () => {
 };
 
 interface MapProps {
+  activeFilter: Filter;
   setActivePage: React.Dispatch<React.SetStateAction<Page>>;
   setBackgroundImgLoaded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Map: React.FC<MapProps> = ({
+  activeFilter,
   setActivePage,
   setBackgroundImgLoaded,
 }) => {
-  const { data, isLoading, isError, isSuccess } = useGetSites();
+  const { data, isLoading, isSuccess } = useGetSites();
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
-
+  const filteredSites = getFilteredSites(data ?? [], activeFilter);
+  console.log(data);
   return (
     <>
       <div className="absolute z-10 flex flex-col top-42 right-2">
@@ -76,7 +80,7 @@ export const Map: React.FC<MapProps> = ({
       />
       {isLoading && <Loading />}
       {isSuccess &&
-        data?.map((site) => {
+        filteredSites?.map((site) => {
           const isSelectedSite = selectedSite?.id === site?.id;
           return (
             <div

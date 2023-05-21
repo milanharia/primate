@@ -28,13 +28,13 @@ import {
 import { IconCta } from "../../components";
 import { Map, List, Chip, Details } from "./components";
 import { useEffect, useMemo, useState } from "react";
-import { Filter, Page } from "./types";
+import { Page } from "./types";
 import { useGetSites } from "../../hooks";
-import { Site } from "../../types";
+import { Filter, Site } from "../../types";
 import { SplashScreen } from "@capacitor/splash-screen";
 
 export const HomePage: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState<Filter>(Filter.HOME);
+  const [activeFilter, setActiveFilter] = useState<Filter>(Filter.ALL);
   const [activePage, setActivePage] = useState<Page>(Page.MAP);
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -87,8 +87,8 @@ export const HomePage: React.FC = () => {
         <IonToolbar color="transparent">
           <div className="flex items-center justify-center w-full pt-2 overflow-x-scroll">
             <Chip
-              active={activeFilter === Filter.HOME}
-              onClick={() => setActiveFilter(Filter.HOME)}
+              active={activeFilter === Filter.ALL}
+              onClick={() => setActiveFilter(Filter.ALL)}
               icon={earthOutline}
             >
               All Sites
@@ -138,12 +138,14 @@ export const HomePage: React.FC = () => {
 
         {activePage === Page.MAP && (
           <Map
+            activeFilter={activeFilter}
             setActivePage={setActivePage}
             setBackgroundImgLoaded={setBackgroundImgLoaded}
           />
         )}
         {activePage === Page.LIST && (
           <List
+            activeFilter={activeFilter}
             setActivePage={setActivePage}
             setSelectedSite={setSelectedSite}
           />
