@@ -24,8 +24,35 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 import "./styles/tailwind.css";
+import { useEffect, useState } from "react";
+import { Preferences } from "@capacitor/preferences";
 
 setupIonicReact();
+
+const AppLauncher: React.FC = () => {
+  const [hasUserOnboarded, setHasUserOnboarded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    Preferences.get({ key: "hasUserOnboarded" })
+      .then((res) => {
+        const { value } = res;
+        if (value === "true") {
+          setHasUserOnboarded(true);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
+
+  if (isLoading) return null;
+  if (hasUserOnboarded) return <Redirect to="/home" />;
+  return <Redirect to="/onboarding" />;
+};
 
 const App: React.FC = () => {
   return (
@@ -35,7 +62,7 @@ const App: React.FC = () => {
         <IonRouterOutlet id="main">
           <Switch>
             <Route path="/" exact={true}>
-              <Redirect to="/onboarding" />
+              <AppLauncher />
             </Route>
             <Route path="/onboarding" exact={true}>
               <OnboardingPage />
