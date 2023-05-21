@@ -61,7 +61,10 @@ const appPages: AppPage[] = [
 
 const CloseButton: React.FC = () => {
   return (
-    <IonMenuToggle className="flex items-center justify-end gap-2 my-12 mr-4">
+    <IonMenuToggle
+      data-cy="menu-close-btn"
+      className="flex items-center justify-end gap-2 my-12 mr-4"
+    >
       <span className="flex items-center justify-center w-8 h-8 p-2 rounded-full shadow-sm bg-tertiary">
         <IonIcon icon={chevronForward} color="light" size="large" />
       </span>
