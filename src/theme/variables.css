@@ -65,3 +65,7 @@ http://ionicframework.com/docs/theming/ */
 .aspect-img {
   aspect-ratio: 16 / 7;
 }
+
+ion-alert button span {
+  color: var(--ion-color-secondary);
+}

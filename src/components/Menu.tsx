@@ -9,6 +9,9 @@ import {
   IonMenu,
   IonMenuToggle,
   IonRow,
+  IonToolbar,
+  useIonAlert,
+  useIonToast,
 } from "@ionic/react";
 
 import { useHistory, useLocation } from "react-router-dom";
@@ -18,6 +21,7 @@ import {
   logoInstagram,
   logoTwitter,
 } from "ionicons/icons";
+import { Preferences } from "@capacitor/preferences";
 
 interface AppPage {
   url: string;
@@ -58,7 +62,7 @@ const appPages: AppPage[] = [
 const CloseButton: React.FC = () => {
   return (
     <IonMenuToggle className="flex items-center justify-end gap-2 my-12 mr-4">
-      <span className="bg-tertiary shadow-sm rounded-full p-2 w-8 h-8 flex items-center justify-center">
+      <span className="flex items-center justify-center w-8 h-8 p-2 rounded-full shadow-sm bg-tertiary">
         <IonIcon icon={chevronForward} color="light" size="large" />
       </span>
       <span className="text-xl text-tertiary">Close</span>
@@ -90,6 +94,37 @@ const MenuButton: React.FC<MenuButtonProps> = ({ selected, appPage }) => {
 
 const Menu: React.FC = () => {
   const location = useLocation();
+
+  const [presentAlert] = useIonAlert();
+  const [presentToast] = useIonToast();
+
+  const handleResetOnboarding = () => {
+    presentAlert(
+      `Tap "Confirm" to see the onboarding screens on the next app launch.`,
+      [
+        {
+          text: "Cancel",
+          role: "cancel",
+        },
+        {
+          handler: () => {
+            Preferences.remove({ key: "hasUserOnboarded" })
+              .then(() => {
+                presentToast(
+                  "You will see the onboarding flow when you next open the app",
+                  2500
+                );
+              })
+              .catch((e) => {
+                presentToast("Something went wrong", 2500);
+              });
+          },
+          text: "Confirm",
+        },
+      ]
+    );
+  };
+
   return (
     <IonMenu swipeGesture={false} contentId="main" type="overlay">
       <IonHeader className="pt-12">
@@ -109,43 +144,56 @@ const Menu: React.FC = () => {
           })}
         </div>
       </IonContent>
-      <IonFooter>
-        <IonGrid>
-          <IonRow>
-            <IonCol size="1.5"></IonCol>
-            <IonCol size="3" className="flex justify-center">
-              <IonButton fill="clear">
-                <IonIcon
-                  slot="icon-only"
-                  icon={logoFacebook}
-                  color="medium"
-                  size="large"
-                />
-              </IonButton>
-            </IonCol>
-            <IonCol size="3" className="flex justify-center">
-              <IonButton fill="clear">
-                <IonIcon
-                  slot="icon-only"
-                  icon={logoTwitter}
-                  color="medium"
-                  size="large"
-                />
-              </IonButton>
-            </IonCol>
-            <IonCol size="3" className="flex justify-center">
-              <IonButton fill="clear">
-                <IonIcon
-                  slot="icon-only"
-                  icon={logoInstagram}
-                  color="medium"
-                  size="large"
-                />
-              </IonButton>
-            </IonCol>
-            <IonCol size="1.5"></IonCol>
-          </IonRow>
-        </IonGrid>
+      <IonFooter className="ion-no-border">
+        <IonToolbar color="white">
+          <IonGrid>
+            <IonRow>
+              <IonCol>
+                <IonButton
+                  onClick={handleResetOnboarding}
+                  expand="block"
+                  color="secondary"
+                >
+                  Reset onboarding flow
+                </IonButton>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol size="1.5"></IonCol>
+              <IonCol size="3" className="flex justify-center">
+                <IonButton fill="clear">
+                  <IonIcon
+                    slot="icon-only"
+                    icon={logoFacebook}
+                    color="medium"
+                    size="large"
+                  />
+                </IonButton>
+              </IonCol>
+              <IonCol size="3" className="flex justify-center">
+                <IonButton fill="clear">
+                  <IonIcon
+                    slot="icon-only"
+                    icon={logoTwitter}
+                    color="medium"
+                    size="large"
+                  />
+                </IonButton>
+              </IonCol>
+              <IonCol size="3" className="flex justify-center">
+                <IonButton fill="clear">
+                  <IonIcon
+                    slot="icon-only"
+                    icon={logoInstagram}
+                    color="medium"
+                    size="large"
+                  />
+                </IonButton>
+              </IonCol>
+              <IonCol size="1.5"></IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonToolbar>
       </IonFooter>
     </IonMenu>
   );
