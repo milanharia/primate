@@ -12,7 +12,7 @@ import {
   IonText,
   IonToolbar,
 } from "@ionic/react";
-import { PropsWithChildren, useRef, useState } from "react";
+import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
 import { IconCta } from "../../components";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -22,6 +22,8 @@ import background from "./assets/background.png";
 
 import "swiper/css";
 import "swiper/css/pagination";
+import { Preferences } from "@capacitor/preferences";
+import { SplashScreen } from "@capacitor/splash-screen";
 
 interface OnboardingScreenProps {
   title: string;
@@ -32,8 +34,8 @@ export const OnboardingScreen = ({
   children,
 }: PropsWithChildren<OnboardingScreenProps>) => {
   return (
-    <div className="flex flex-col justify-center items-center h-full w-full">
-      <h1 className="text-white font-bold text-4xl px-12 text-center">
+    <div className="flex flex-col items-center justify-center w-full h-full">
+      <h1 className="px-12 text-4xl font-bold text-center text-white">
         {title}
       </h1>
       <div>{children}</div>
@@ -60,31 +62,48 @@ const PaginationBullet = ({
 
 export const OnboardingPage: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [backgroundImgLoaded, setBackgroundImgLoaded] = useState(false);
+
   const swiperRef = useRef<TSwiper>();
   const history = useHistory();
 
+  // Hide splash screen once background image has loaded so you
+  // do not see a white flash on launch
+  useEffect(() => {
+    if (backgroundImgLoaded) {
+      SplashScreen.hide();
+    }
+  }, [backgroundImgLoaded]);
+
   const handlePrevSlide = () => {
-    if (swiperRef.current) {
+    if (swiperRef.current && activeIndex > 0) {
       swiperRef.current.slidePrev();
     }
   };
 
-  const handleNextSlide = () => {
+  const handleNextSlide = async () => {
     if (activeIndex === 3) {
+      await Preferences.set({ key: "hasUserOnboarded", value: "true" }).catch(
+        (e) => console.log(e)
+      );
       history.push("/home");
       return;
     }
 
-    if (swiperRef.current) {
+    if (swiperRef.current && activeIndex < 3) {
       swiperRef.current.slideNext();
     }
   };
 
   return (
     <IonPage>
-      <IonHeader></IonHeader>
       <IonContent fullscreen className="flex flex-col">
-        <IonImg src={background} className="absolute inset-0 object-cover z0" />
+        <IonImg
+          onIonImgDidLoad={() => setBackgroundImgLoaded(true)}
+          onIonError={() => setBackgroundImgLoaded(true)}
+          src={background}
+          className="absolute inset-0 object-cover z0"
+        />
         <Swiper
           className="h-full"
           slidesPerView={1}
@@ -136,7 +155,7 @@ export const OnboardingPage: React.FC = () => {
                 )}
               </IonCol>
               <IonCol className="flex items-center">
-                <div className="flex gap-2 items-center justify-center">
+                <div className="flex items-center justify-center gap-2">
                   <PaginationBullet
                     testId="bullet-1"
                     active={activeIndex === 0}

@@ -27,16 +27,26 @@ import {
 } from "ionicons/icons";
 import { IconCta } from "../../components";
 import { Map, List, Chip, Details } from "./components";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Filter, Page } from "./types";
 import { useGetSites } from "../../hooks";
 import { Site } from "../../types";
+import { SplashScreen } from "@capacitor/splash-screen";
 
 export const HomePage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<Filter>(Filter.HOME);
   const [activePage, setActivePage] = useState<Page>(Page.MAP);
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [backgroundImgLoaded, setBackgroundImgLoaded] = useState(false);
+
+  // Hide splash screen once background image has loaded so you
+  // do not see a white flash on launch
+  useEffect(() => {
+    if (backgroundImgLoaded) {
+      SplashScreen.hide();
+    }
+  }, [backgroundImgLoaded]);
 
   const { data, refetch } = useGetSites();
 
@@ -60,7 +70,7 @@ export const HomePage: React.FC = () => {
     <IonPage>
       <IonHeader className="ion-no-border">
         <IonToolbar color="transparent">
-          <div className="relative mx-4 flex items-center px-4 bg-white border-black border py-1 mt-4 rounded-l-full rounded-r-full">
+          <div className="relative flex items-center px-4 py-1 mx-4 mt-4 bg-white border border-black rounded-l-full rounded-r-full">
             <IonSearchbar
               mode="ios"
               inputMode="text"
@@ -75,7 +85,7 @@ export const HomePage: React.FC = () => {
           </div>
         </IonToolbar>
         <IonToolbar color="transparent">
-          <div className="flex items-center pt-2 justify-center w-full overflow-x-scroll">
+          <div className="flex items-center justify-center w-full pt-2 overflow-x-scroll">
             <Chip
               active={activeFilter === Filter.HOME}
               onClick={() => setActiveFilter(Filter.HOME)}
@@ -101,7 +111,7 @@ export const HomePage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       {searchResults.length > 0 && searchTerm.length > 0 ? (
-        <div className="absolute top-36 shadow-md mt-2 rounded-2xl overflow-hidden left-2 right-2 z-50 bg-white">
+        <div className="absolute z-50 mt-2 overflow-hidden bg-white shadow-md top-36 rounded-2xl left-2 right-2">
           <IonList>
             {searchResults?.map((site) => {
               if (!site) return null;
@@ -111,7 +121,7 @@ export const HomePage: React.FC = () => {
                     <IonLabel>{site.title}</IonLabel>
                     <IonImg
                       slot="end"
-                      className="h-3 w-3"
+                      className="w-3 h-3"
                       src={site.country.flag}
                       alt={`flag of ${site.country.name}`}
                     />
@@ -126,7 +136,12 @@ export const HomePage: React.FC = () => {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-        {activePage === Page.MAP && <Map setActivePage={setActivePage} />}
+        {activePage === Page.MAP && (
+          <Map
+            setActivePage={setActivePage}
+            setBackgroundImgLoaded={setBackgroundImgLoaded}
+          />
+        )}
         {activePage === Page.LIST && (
           <List
             setActivePage={setActivePage}

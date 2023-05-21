@@ -22,7 +22,7 @@ const SiteModal: React.FC<Site> = (site) => {
   return (
     <>
       <IonContent className="ion-padding">
-        <div className="relative aspect-img w-full rounded-2xl overflow-hidden my-4">
+        <div className="relative w-full my-4 overflow-hidden aspect-img rounded-2xl">
           <IonImg src={site.img} className="absolute inset-0 object-cover" />
         </div>
         <PrimateDetailsTitle {...site} />
@@ -33,7 +33,7 @@ const SiteModal: React.FC<Site> = (site) => {
 
 const Loading = () => {
   return (
-    <div className="absolute inset-0 flex justify-center items-center">
+    <div className="absolute inset-0 flex items-center justify-center">
       <IonSpinner />
     </div>
   );
@@ -41,15 +41,19 @@ const Loading = () => {
 
 interface MapProps {
   setActivePage: React.Dispatch<React.SetStateAction<Page>>;
+  setBackgroundImgLoaded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Map: React.FC<MapProps> = ({ setActivePage }) => {
+export const Map: React.FC<MapProps> = ({
+  setActivePage,
+  setBackgroundImgLoaded,
+}) => {
   const { data, isLoading, isError, isSuccess } = useGetSites();
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
 
   return (
     <>
-      <div className="absolute top-42 right-2 z-10 flex flex-col">
+      <div className="absolute z-10 flex flex-col top-42 right-2">
         <IonFabButton
           onClick={() => setActivePage(Page.LIST)}
           size="small"
@@ -64,7 +68,12 @@ export const Map: React.FC<MapProps> = ({ setActivePage }) => {
           <IonIcon icon={navigate}></IonIcon>
         </IonFabButton>
       </div>
-      <IonImg src={map} className="absolute inset-0 object-cover" />
+      <IonImg
+        onIonImgDidLoad={() => setBackgroundImgLoaded(true)}
+        onIonError={() => setBackgroundImgLoaded(true)}
+        src={map}
+        className="absolute inset-0 object-cover"
+      />
       {isLoading && <Loading />}
       {isSuccess &&
         data?.map((site) => {
